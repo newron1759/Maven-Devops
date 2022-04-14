@@ -28,7 +28,7 @@ pipeline {
         steps {
               withSonarQubeEnv('sonar') {
                 
-				dir('java-source'){
+				dir('webapp'){
                  sh 'mvn -U clean install sonar:sonar'
                 }
 				

@@ -15,9 +15,9 @@ pipeline {
 	  
 	  stage ('Build')  {
 	      steps {
+            dir('webapp'){
             sh "pwd"
             sh "ls -lah"
-            dir('java-source'){
             sh "mvn package"
           }
         }

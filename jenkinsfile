@@ -64,7 +64,7 @@ pipeline {
             steps {
                 rtMavenRun (
                     tool: "maven", // Tool name from Jenkins configuration
-                    pom: 'java-source/pom.xml',
+                    pom: 'webapp/pom.xml',
                     goals: 'clean install',
                     deployerId: "MAVEN_DEPLOYER",
                     resolverId: "MAVEN_RESOLVER"
@@ -86,7 +86,7 @@ pipeline {
                   sshagent(['sshkey']) {
                        
                         sh "scp -o StrictHostKeyChecking=no dockerfile ubuntu@18.206.173.255:/home/ubuntu"
-                        sh "scp -o StrictHostKeyChecking=no customimage.yaml ubuntu@18.206.173.255:/home/ubuntu"
+                        sh "scp -o StrictHostKeyChecking=no playbook1.yaml ubuntu@18.206.173.255:/home/ubuntu"
                     }
                 }
             
@@ -96,7 +96,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@18.206.173.255 -C \"sudo ansible-playbook create-customimage.yaml\""
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@18.206.173.255 -C \"sudo ansible-playbook playbook1.yaml\""
                         
                     }
                 }
@@ -107,8 +107,8 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "scp -o StrictHostKeyChecking=no create-k8s-deployment.yaml ubuntu@18.206.173.255:/home/ubuntu"
-                        sh "scp -o StrictHostKeyChecking=no nodePort.yaml ubuntu@18.206.173.255:/home/ubuntu"
+                        sh "scp -o StrictHostKeyChecking=no deployment.yaml ubuntu@18.206.173.255:/home/ubuntu"
+                        sh "scp -o StrictHostKeyChecking=no service.yaml ubuntu@18.206.173.255:/home/ubuntu"
                     }
                 }
             
@@ -127,7 +127,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.236.58.176 -C \"sudo kubectl apply -f create-k8s-deployment.yaml\""
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.236.58.176 -C \"sudo kubectl apply -f deployment.yaml\""
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@54.236.58.176 -C \"sudo kubectl apply -f service.yaml\""
                         
                     }
